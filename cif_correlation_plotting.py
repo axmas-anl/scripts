@@ -105,15 +105,16 @@ def find_all_the_vectors(s, plane, offset, scale=1.0, ax=None):
 
 
 class AtomAnnotations():
-    def __init__(self, atomman_structure, axis_handle):
+    def __init__(self, atomman_structure, plotview_handle):
         self.s = atomman_structure
         vectors, labels = no_really_find_all_the_vectors(atomman_structure)
         self.vectors = vectors
         self.labels = labels
         self.annotations = []
-        self.axis_handle = axis_handle
+        self.plotview_handle = plotview_handle
     def clear(self):
         [aa.remove() for aa in self.annotations]
+        self.plotview_handle.draw()
     def plot(self, plane, offset, threshold=0.5):
         # what is the first vertical axis?
         offset_idx = plane.find("0")
@@ -138,12 +139,14 @@ class AtomAnnotations():
         elif plane == "0yz":
             plane_x = self.vectors[:,:,1]/s.box.b
             plane_y = self.vectors[:,:,2]/s.box.c
+        else:
+            raise ValueError("plane not recognised")
     
         px = plane_x[whether_to_plot].ravel()
         py = plane_y[whether_to_plot].ravel()
         ll = self.labels[whether_to_plot].ravel()
     
-        ax = self.axis_handle
+        ax = self.plotview_handle.ax
 
         for x,y,l in zip(px,py,ll):
             if x<1e-6 and y<1e-6:
@@ -151,3 +154,4 @@ class AtomAnnotations():
             _ox = (np.random.random()-0.5 ) /5
             _oy = (np.random.random()-0.5 ) /5
             self.annotations.append(ax.annotate(l, (x,y), xytext=(x+_ox,y+_oy), arrowprops={"width":0.5, "headwidth":0.5}))
+        self.plotview_handle.draw()

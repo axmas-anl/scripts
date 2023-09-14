@@ -5,7 +5,7 @@ A simple script for plotting some atomic correlation vectors in nexpy, likely fo
 Define an AtomAnnotations object and us the `plot` method to add annotations to a plot, and `clear` to clear them. 
 ```
 s = read_cif("/path/to/a/crystallographic/information/file.cif")
-a = AtomAnnotations(s, plotview.ax)
+a = AtomAnnotations(s, plotview)
 a.plot('xy0', 0.0)
 ```
 
@@ -16,4 +16,4 @@ The offset should be the _actual_ value in the vertical direction, i.e. to plot 
 Optionally one can provide a threshold, i.e. how close to the plane the correlation needs to be to appear. By default plot will add any correlation within 0.5 Angstroms. 
 
 ### The clear method
-running a.clear() will remove all the annotations from the plot. 
+running `a.clear()` will remove all the annotations from the plot. 
